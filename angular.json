@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "70014662-de2a-4d48-8654-89198db6e427"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -20,13 +23,15 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/assets/img"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/webrtc-adapter/out/adapter.js",
+              "src/assets/js/webrtc_adaptor.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -83,13 +88,15 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "src/assets/img"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/webrtc-adapter/out/adapter.js",
+              "src/assets/js/webrtc_adaptor.js"
+            ]
           }
         },
         "lint": {
