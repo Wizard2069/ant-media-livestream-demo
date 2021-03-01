@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 
+import {WebRtcService} from '../../service/web-rtc.service';
 import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
 
 @Component({
@@ -8,24 +9,17 @@ import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
     styleUrls: ['./video.component.scss']
 })
 export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
+    
+    private webRTCAdaptor: WebRTCAdaptor;
 
     public startStream: boolean;
     
-    public pcConfig = null;
-    
-    public sdpConstraints = {
-        OfferToReceiveAudio: false,
-        OfferToReceiveVideo: false
-    };
-    
-    public mediaConstraints = {
-        video: true,
-        audio: true
-    };
-    
-    public webRTCAdaptor: WebRTCAdaptor;
+    public streamId = 'stream1';
 
-    constructor() {
+    constructor(private webRTCService: WebRtcService) {
+        this.webRTCService.additionalConfig = {
+            localVideoId: 'localVideo'
+        };
     }
     
     ngOnInit(): void {
@@ -34,7 +28,8 @@ export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
     
     ngAfterViewInit(): void {
         console.log('after view init');
-        this.initWebRTCAdaptor();
+        this.webRTCService.initWebRTCAdaptor();
+        this.webRTCAdaptor = this.webRTCService.getWebRTCAdaptor;
     }
     
     ngOnDestroy(): void {
@@ -42,42 +37,15 @@ export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
         this.webRTCAdaptor.closeStream();
         this.webRTCAdaptor.closeWebSocket();
     }
-
-    initWebRTCAdaptor(): void {
-        this.webRTCAdaptor = new WebRTCAdaptor({
-            websocket_url: 'ws://' + location.hostname + ':5080/liveStreamDemo/websocket',
-            mediaConstraints: this.mediaConstraints,
-            peerconnection_config: this.pcConfig,
-            sdp_constraints: this.sdpConstraints,
-            localVideoId: 'localVideo',
-            callback: (info, obj) => {
-                if (info === 'initialized') {
-                    console.log('initialized');
-                } else if (info === 'publish_started') {
-                    console.log('publish started');
-                } else if (info === 'publish_finished') {
-                    console.log('publish finished');
-                } else if (info === 'screen_share_extension_available') {
-                    console.log('screen share extension available');
-                } else if (info === 'screen_share_stopped') {
-                    console.log('screen share stopped');
-                }
-            },
-            callbackError: (error) => {
-                console.log('error callback: ' + JSON.stringify(error));
-                alert(JSON.stringify(error));
-            }
-        });
-    }
     
     onStartStream(): void {
-        this.webRTCAdaptor.publish('stream1', null);
+        this.webRTCAdaptor.publish(this.streamId, null);
         this.startStream = true;
     }
     
     onStopStream(): void {
-        this.webRTCAdaptor.stop('stream1');
-        this.webRTCAdaptor.closePeerConnection('stream1');
+        this.webRTCAdaptor.stop(this.streamId);
+        this.webRTCAdaptor.closePeerConnection(this.streamId);
         this.startStream = false;
     }
 }
