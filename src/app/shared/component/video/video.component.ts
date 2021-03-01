@@ -17,23 +17,20 @@ export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
     public streamId = 'stream1';
 
     constructor(private webRTCService: WebRtcService) {
+    }
+    
+    ngOnInit(): void {
         this.webRTCService.additionalConfig = {
             localVideoId: 'localVideo'
         };
     }
     
-    ngOnInit(): void {
-        console.log('init');
-    }
-    
     ngAfterViewInit(): void {
-        console.log('after view init');
         this.webRTCService.initWebRTCAdaptor();
         this.webRTCAdaptor = this.webRTCService.getWebRTCAdaptor;
     }
     
     ngOnDestroy(): void {
-        console.log('destroy');
         this.webRTCAdaptor.closeStream();
         this.webRTCAdaptor.closeWebSocket();
     }

@@ -17,13 +17,13 @@ export class PlayerComponent implements OnInit, AfterViewInit, OnDestroy {
     public streamId = 'stream1';
 
     constructor(private webRTCService: WebRtcService) {
+    }
+
+    ngOnInit(): void {
         this.webRTCService.additionalConfig = {
             remoteVideoId: 'remoteVideo',
             isPlayMode: true,
         };
-    }
-
-    ngOnInit(): void {
     }
 
     ngAfterViewInit(): void {
