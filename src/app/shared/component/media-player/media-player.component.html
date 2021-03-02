@@ -1,0 +1,42 @@
+<div class="row my-3">
+    <div class="jumbotron text-center">
+        <vg-player (onPlayerReady)="onPlayerReady($event)">
+            <vg-overlay-play></vg-overlay-play>
+            <vg-buffering></vg-buffering>
+    
+            <div class="scrub-bar">
+                <div class="scrub-bar--current">
+                    <div class="progress">
+                        <div
+                            class="progress-bar bg-danger"
+                            role="progressbar"
+                            [ngStyle]="{'width': currentTime + '%'}"
+                            [attr.aria-valuenow]="currentTime"
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                        ></div>
+                        <div class="slider"></div>
+                    </div>
+                </div>
+            </div>
+    
+            <vg-controls [vgAutohide]="false" [vgAutohideTime]="5">
+                <vg-play-pause></vg-play-pause>
+            
+                <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+            
+                <p>Live</p>
+                <vg-scrub-bar style="pointer-events: none;"></vg-scrub-bar>
+            
+                <vg-mute></vg-mute>
+                <vg-volume></vg-volume>
+            
+                <vg-fullscreen></vg-fullscreen>
+            </vg-controls>
+        
+            <video [vgMedia]="media" #media [id]="videoId" preload="auto" autoplay>
+            </video>
+        </vg-player>
+    </div>
+</div>
+

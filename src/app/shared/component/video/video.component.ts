@@ -2,6 +2,7 @@ import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 
 import {WebRtcService} from '../../service/web-rtc.service';
 import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
+import {VgApiService} from '@videogular/ngx-videogular/core';
 
 @Component({
     selector: 'app-video',
@@ -11,6 +12,8 @@ import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
 export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
     
     private webRTCAdaptor: WebRTCAdaptor;
+    
+    private api: VgApiService;
 
     public startStream: boolean;
     
