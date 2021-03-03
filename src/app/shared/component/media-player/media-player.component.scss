@@ -1,3 +1,5 @@
+$danger-color: #f93154;
+
 .scrub-bar {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -12,7 +14,7 @@
     cursor: pointer;
     align-items: center;
     background: rgba(0, 0, 0, 0.75);
-    z-index: 250;
+    z-index: 400;
     -webkit-transition: bottom 1s, opacity 0.5s;
     -khtml-transition: bottom 1s, opacity 0.5s;
     -moz-transition: bottom 1s, opacity 0.5s;
@@ -24,7 +26,6 @@
         display: flex;
         flex-grow: 1;
         align-items: center;
-        height: 100%;
     }
 }
 
@@ -35,11 +36,21 @@
         position: absolute;
         width: 15px;
         height: 15px;
-        left: 0;
         top: 50%;
-        transform: translate(0, -50%);
+        transform: translateY(-50%);
         border-radius: 15px;
-        background-color: #f93154;
+        background-color: $danger-color;
         transition: all 0.2s ease-out;
+    }
+}
+
+.live {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    span {
+        font-size: 1.25rem;
+        color: $danger-color;
     }
 }

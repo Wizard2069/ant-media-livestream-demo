@@ -15,7 +15,10 @@
                             aria-valuemin="0"
                             aria-valuemax="100"
                         ></div>
-                        <div class="slider"></div>
+                        <div 
+                            class="slider" 
+                            [ngStyle]="{'left': currentTime - 1 + '%'}"
+                        ></div>
                     </div>
                 </div>
             </div>
@@ -25,7 +28,9 @@
             
                 <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
             
-                <p>Live</p>
+                <div class="live">
+                    <span>Live</span>
+                </div>
                 <vg-scrub-bar style="pointer-events: none;"></vg-scrub-bar>
             
                 <vg-mute></vg-mute>
