@@ -8,8 +8,12 @@
 // MDB SCSS
 @import "~mdb-angular-ui-kit/assets/scss/mdb.scss";
 
+body {
+    background-color: #f1f1f1;
+}
+
 vg-controls {
-    :focus {
+    *:focus {
         outline: none!important;
     }
 }

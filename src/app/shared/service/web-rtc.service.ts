@@ -4,7 +4,7 @@ import {WebRTCAdaptor} from '../../../assets/js/webrtc_adaptor.js';
 
 @Injectable()
 export class WebRtcService {
-
+    
     public pcConfig = null;
 
     public sdpConstraints = {
@@ -20,6 +20,10 @@ export class WebRtcService {
     public additionalConfig = {};
 
     private webRTCAdaptor: WebRTCAdaptor;
+    
+    public handleError: () => void;
+    
+    public handleInit: () => void;
     
     get getWebRTCAdaptor(): WebRTCAdaptor {
         return this.webRTCAdaptor;
@@ -39,6 +43,7 @@ export class WebRtcService {
             callback: (info, obj) => {
                 if (info === 'initialized') {
                     console.log('initialized');
+                    this.handleInit();
                 } else if (info === 'publish_started') {
                     console.log('publish started');
                 } else if (info === 'publish_finished') {
@@ -51,7 +56,8 @@ export class WebRtcService {
             },
             callbackError: (error) => {
                 console.log('error callback: ' + JSON.stringify(error));
-                alert(JSON.stringify(error));
+                // alert(JSON.stringify(error));
+                this.handleError();
             }
         });
     }

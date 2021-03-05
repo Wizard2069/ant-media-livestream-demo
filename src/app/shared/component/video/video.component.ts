@@ -1,8 +1,7 @@
-import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 
 import {WebRtcService} from '../../service/web-rtc.service';
 import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
-import {VgApiService} from '@videogular/ngx-videogular/core';
 
 @Component({
     selector: 'app-video',
@@ -12,10 +11,8 @@ import {VgApiService} from '@videogular/ngx-videogular/core';
 export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
     
     private webRTCAdaptor: WebRTCAdaptor;
-    
-    private api: VgApiService;
 
-    public startStream: boolean;
+    public startStream = false;
     
     public streamId = 'stream1';
 
@@ -29,10 +26,16 @@ export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     
     ngAfterViewInit(): void {
+        this.webRTCService.handleError = () => {
+            this.startStream = false;  
+        };
+        this.webRTCService.handleInit = () => {
+            
+        };
         this.webRTCService.initWebRTCAdaptor();
         this.webRTCAdaptor = this.webRTCService.getWebRTCAdaptor;
     }
-    
+
     ngOnDestroy(): void {
         this.webRTCAdaptor.closeStream();
         this.webRTCAdaptor.closeWebSocket();
@@ -47,5 +50,13 @@ export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
         this.webRTCAdaptor.stop(this.streamId);
         this.webRTCAdaptor.closePeerConnection(this.streamId);
         this.startStream = false;
+    }
+    
+    onMute(mute): void {
+        if (mute) {
+            this.webRTCAdaptor.muteLocalMic();
+        } else {
+            this.webRTCAdaptor.unmuteLocalMic();
+        }
     }
 }
