@@ -22,8 +22,12 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "allowedCommonJsDependencies": [
+              "keycloak-js"
+            ],
             "assets": [
-              "src/assets/img"
+              "src/assets/img",
+              "src/assets/silent-check-sso.html"
             ],
             "styles": [
               "src/styles.scss",

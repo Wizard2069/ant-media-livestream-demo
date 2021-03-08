@@ -1,7 +1,8 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 
 import {WebRtcService} from '../../service/web-rtc.service';
 import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
+import {MessagePayload} from '../../../types';
 
 @Component({
     selector: 'app-video',
@@ -10,11 +11,13 @@ import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
 })
 export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
     
-    private webRTCAdaptor: WebRTCAdaptor;
+    public webRTCAdaptor: WebRTCAdaptor;
 
     public startStream = false;
     
     public streamId = 'stream1';
+    
+    public data: MessagePayload;
 
     constructor(private webRTCService: WebRtcService) {
     }
@@ -26,14 +29,16 @@ export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     
     ngAfterViewInit(): void {
+        this.webRTCService.handleData = (data) => {
+            this.data = data;
+        };
         this.webRTCService.handleError = () => {
             this.startStream = false;  
         };
-        this.webRTCService.handleInit = () => {
-            
-        };
         this.webRTCService.initWebRTCAdaptor();
-        this.webRTCAdaptor = this.webRTCService.getWebRTCAdaptor;
+        setTimeout(() => {
+            this.webRTCAdaptor = this.webRTCService.getWebRTCAdaptor;
+        });
     }
 
     ngOnDestroy(): void {

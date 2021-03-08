@@ -10,8 +10,7 @@
         *ngIf="!playMode"
     ></vg-time-display>
     
-    <vg-overlay-play *ngIf="playMode" (click)="onClick($event)"></vg-overlay-play>
-    <vg-buffering *ngIf="playMode"></vg-buffering>
+    <vg-overlay-play *ngIf="playMode" (click)="onClickPlayPause()"></vg-overlay-play>
     
     <vg-controls [vgAutohide]="true" [vgAutohideTime]="5" *ngIf="playMode">
         <div class="scrub-bar" *ngIf="playMode">
@@ -36,7 +35,7 @@
             </div>
         </div>
         
-        <vg-play-pause></vg-play-pause>
+        <vg-play-pause *ngIf="playMode" (click)="onClickPlayPause()"></vg-play-pause>
         
         <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
         

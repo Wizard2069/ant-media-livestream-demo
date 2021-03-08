@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {KeycloakService} from 'keycloak-angular';
 
 @Component({
     selector: 'app-header',
@@ -7,10 +8,20 @@ import {Component, OnInit} from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-    constructor() {
+    public isLoggedIn: boolean;
+    
+    constructor(private keycloak: KeycloakService) {
     }
 
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
+        this.isLoggedIn = await this.keycloak.isLoggedIn();
     }
 
+    onLogin(): void {
+        this.keycloak.login();
+    }
+    
+    onLogout(): void {
+        this.keycloak.logout();
+    }
 }

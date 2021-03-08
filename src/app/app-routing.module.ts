@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+
 import {ContentLayoutComponent} from './layout/content-layout/content-layout.component';
+import {AuthGuard} from './core/guard/auth.guard';
 
 const routes: Routes = [
     {
@@ -8,12 +10,20 @@ const routes: Routes = [
         component: ContentLayoutComponent,
         children: [
             {
+                path: '',
+                loadChildren: () =>
+                    import('./modules/home/home.module').then(m => m.HomeModule),
+                pathMatch: 'full'
+            },
+            {
                 path: 'stream',
                 loadChildren: () =>
-                    import('./modules/stream/stream.module').then(m => m.StreamModule)
+                    import('./modules/stream/stream.module').then(m => m.StreamModule),
+                canLoad: [AuthGuard],
+                canActivateChild: [AuthGuard]
             }
         ]
-    }
+    },
 ];
 
 @NgModule({

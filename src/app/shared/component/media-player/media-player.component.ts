@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {VgApiService} from '@videogular/ngx-videogular/core';
+import {VgApiService, VgStates} from '@videogular/ngx-videogular/core';
 
 @Component({
     selector: 'app-media-player',
@@ -18,6 +18,8 @@ export class MediaPlayerComponent implements OnInit {
     
     @Output() stopStream = new EventEmitter<boolean>();
     
+    @Output() playStream = new EventEmitter<boolean>();
+    
     public api: VgApiService;
 
     public isMute = false;
@@ -33,7 +35,6 @@ export class MediaPlayerComponent implements OnInit {
     }
 
     onPlayerReady(api: VgApiService): void {
-        console.log('ready');
         this.api = api;
         this.api.getDefaultMedia().subscriptions.playing.subscribe(() => {
             this.currentTime = 100;
@@ -43,8 +44,14 @@ export class MediaPlayerComponent implements OnInit {
         });
     }
 
-    onClick(e): void {
-        console.log(e);
+    onClickPlayPause(): void {
+        this.start = !this.start;
+        if (this.start) {
+            this.api.getDefaultMedia().state = VgStates.VG_PLAYING;
+        } else {
+            this.api.getDefaultMedia().state = VgStates.VG_PAUSED;
+        }
+        this.playStream.emit(this.start);
     }
     
     onClickMute(): void {
@@ -58,6 +65,7 @@ export class MediaPlayerComponent implements OnInit {
     }
     
     onClickStopStream(): void {
+        this.start = false;
         this.stopStream.emit(false);
     }
 }

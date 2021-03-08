@@ -1,9 +1,17 @@
 <div class="row my-3">
     <div class="col-lg-8 ps-lg-0 video-stream">
-        <app-media-player videoId="remoteVideo" [playMode]="true"></app-media-player>
+        <app-media-player 
+            videoId="remoteVideo" 
+            [playMode]="true" 
+            (playStream)="onPlayStream($event)"
+        ></app-media-player>
     </div>
     <div class="col-lg-4 mt-3 mt-lg-0 px-lg-0 chat-box-wrapper">
-        <app-chat-box></app-chat-box>
+        <app-chat-box 
+            [webRTCAdaptor]="webRTCAdaptor"
+            [streamId]="streamId"
+            [messageData]="data"
+        ></app-chat-box>
     </div>
 </div>
 

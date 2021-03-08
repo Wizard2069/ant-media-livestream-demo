@@ -1,96 +1,53 @@
 <div class="title" #title>
     <h4>Live Chat</h4>
 </div>
-<div class="chat-box" [ngStyle]="chatBoxHeight ? {'height': chatBoxHeight + 'px'} : null">
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
+<div class="chat-box"
+     [ngStyle]="chatBoxHeight ? {'height': chatBoxHeight + 'px'} : null"
+     *ngIf="messages.length === 0"
+></div>
+<div 
+    class="chat-box" 
+    [ngStyle]="chatBoxHeight ? {'height': chatBoxHeight + 'px'} : null"
+    *ngIf="messages.length > 0"
+>
+    <div
+        *ngFor="let m of messages" 
+        [ngClass]="m.type === 'me' ? 'host-message' : 'person-message'"
+    >
+        <div class="message-time me-1" *ngIf="m.type === 'me'">
+            <span class="content">{{m.time.getHours()}}:{{m.time.getMinutes()}}</span>
         </div>
-        <div class="message">
-            <span>Hello</span>
+        <div class="message ms-0" *ngIf="m.type === 'me'">
+            <span class="content">{{m.msg}}</span>
         </div>
-    </div>
-    <div class="host-message">
-        <div class="message">
-            <span>Hi</span>
+        <div class="avatar" *ngIf="m.type === 'other'">
+            <img [src]="m.sender.avatar" alt="Avatar">
         </div>
-    </div>
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
+        <div class="message" *ngIf="m.type === 'other'">
+            <span class="username">{{m.sender.name}}</span>
+            <span class="content">{{m.msg}}</span>
         </div>
-        <div class="message">
-            <span>Hello</span>
-        </div>
-    </div>
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
-        </div>
-        <div class="message">
-            <span>Hello</span>
-        </div>
-    </div>
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
-        </div>
-        <div class="message">
-            <span>Hello</span>
-        </div>
-    </div>
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
-        </div>
-        <div class="message">
-            <span>Hello</span>
-        </div>
-    </div>
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
-        </div>
-        <div class="message">
-            <span>Hello</span>
-        </div>
-    </div>
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
-        </div>
-        <div class="message">
-            <span>Hello</span>
-        </div>
-    </div>
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
-        </div>
-        <div class="message">
-            <span>Hello</span>
-        </div>
-    </div>
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
-        </div>
-        <div class="message">
-            <span>Hello</span>
-        </div>
-    </div>
-    <div class="person-message">
-        <div class="avatar">
-            <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar">
-        </div>
-        <div class="message">
-            <span>mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm</span>
+        <div class="message-time ms-1" *ngIf="m.type === 'other'">
+            <span class="content">{{m.time.getHours()}}:{{m.time.getMinutes()}}</span>
         </div>
     </div>
 </div>
 <div class="message-input" #messageInput>
-    <span id="msg" class="input ms-1" role="textbox" contenteditable (input)="onChange($event)"></span>
-    <div class="send-btn">
+    <span
+        id="msg" 
+        class="input ms-1" 
+        role="textbox" 
+        contenteditable 
+        (input)="onChange($event)"
+        (focusin)="submitting = true"
+        (focusout)="submitting = false"
+        (keydown.enter)="$event.preventDefault();onSubmit()"
+    ></span>
+    <div 
+        class="send-btn" 
+        (click)="onSubmit()" 
+        [ngStyle]="!submitting ? {'color': '#888'} : null"
+    >
         <i class="fas fa-paper-plane fa-lg"></i>
     </div>
 </div>

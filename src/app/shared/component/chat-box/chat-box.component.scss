@@ -25,9 +25,24 @@
         background-color: #e4e6eb;
         max-width: calc((100% - 25px) / 2);
         
-        span {
+        .username {
+            font-size: 0.75rem;
+            display: block;
+            font-weight: bold;
+        }
+        
+        .content {
             color: #050505;
             word-break: break-word;
+        }
+    }
+    
+    .message-time {
+        display: flex;
+        align-items: center;
+        
+        .content {
+            color: gray;
         }
     }
 }
@@ -63,7 +78,7 @@
         .message {
             background-color: $danger-color;
 
-            span {
+            .content {
                 color: #fff;
             }
         }
@@ -78,7 +93,7 @@
     background-color: #fff;
 
     .input {
-        width: 85%;
+        width: 90%;
         border-bottom: 2px solid #fff;
         cursor: text;
         max-height: 100px;
