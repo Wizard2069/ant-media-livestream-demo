@@ -23,7 +23,7 @@
         border-radius: 15px;
         padding: 4px 9px 5px;
         background-color: #e4e6eb;
-        max-width: calc((100% - 25px) / 2);
+        max-width: calc((100% - 25px) * 2 / 3);
         
         .username {
             font-size: 0.75rem;
@@ -69,19 +69,6 @@
 
     .person-message {
         @extend .general-message;
-    }
-
-    .host-message {
-        @extend .general-message;
-        justify-content: flex-end;
-
-        .message {
-            background-color: $danger-color;
-
-            .content {
-                color: #fff;
-            }
-        }
     }
 }
 

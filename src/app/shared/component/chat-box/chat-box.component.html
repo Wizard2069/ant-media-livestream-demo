@@ -12,22 +12,16 @@
 >
     <div
         *ngFor="let m of messages" 
-        [ngClass]="m.type === 'me' ? 'host-message' : 'person-message'"
+        class="person-message"
     >
-        <div class="message-time me-1" *ngIf="m.type === 'me'">
-            <span class="content">{{m.time.getHours()}}:{{m.time.getMinutes()}}</span>
-        </div>
-        <div class="message ms-0" *ngIf="m.type === 'me'">
-            <span class="content">{{m.msg}}</span>
-        </div>
-        <div class="avatar" *ngIf="m.type === 'other'">
+        <div class="avatar">
             <img [src]="m.sender.avatar" alt="Avatar">
         </div>
-        <div class="message" *ngIf="m.type === 'other'">
+        <div class="message">
             <span class="username">{{m.sender.name}}</span>
             <span class="content">{{m.msg}}</span>
         </div>
-        <div class="message-time ms-1" *ngIf="m.type === 'other'">
+        <div class="message-time ms-1">
             <span class="content">{{m.time.getHours()}}:{{m.time.getMinutes()}}</span>
         </div>
     </div>

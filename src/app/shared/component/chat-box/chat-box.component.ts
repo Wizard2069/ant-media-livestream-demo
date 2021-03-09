@@ -1,9 +1,10 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild, Input, OnChanges, SimpleChanges} from '@angular/core';
-
-import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
-import {CustomKeycloakProfile, Message, MessagePayload} from '../../../types';
 import {KeycloakService} from 'keycloak-angular';
 import {KeycloakProfile} from 'keycloak-js';
+import {interval} from 'rxjs';
+
+import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
+import {CustomKeycloakProfile, MessagePayload} from '../../../types';
 
 @Component({
     selector: 'app-chat-box',
@@ -11,29 +12,29 @@ import {KeycloakProfile} from 'keycloak-js';
     styleUrls: ['./chat-box.component.scss']
 })
 export class ChatBoxComponent implements OnInit, AfterViewInit, OnChanges {
-    
+
     @ViewChild('title') titleView: ElementRef;
-    
+
     @ViewChild('messageInput') messageInputView: ElementRef;
-    
+
     @Input() webRTCAdaptor: WebRTCAdaptor;
-    
+
     @Input() streamId: string;
 
     @Input() messageData: MessagePayload;
-    
+
     public chatBoxHeight: number;
-    
+
     public submitting = false;
-    
+
     public message: string;
 
     public submitted = false;
-    
-    public messages: Message[] = [];
-    
+
+    public messages: MessagePayload[] = [];
+
     private ws: WebSocket;
-    
+
     private userProfile: KeycloakProfile | CustomKeycloakProfile | null = null;
 
     constructor(private keycloak: KeycloakService) {
@@ -53,18 +54,13 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnChanges {
         this.keycloak.loadUserProfile()
             .then(profile => this.userProfile = profile);
     }
-    
+
     ngOnChanges(changes: SimpleChanges): void {
         if (this.messageData) {
             this.messages.push({
                 ...this.messageData,
-                time: new Date(this.messageData.time),
-                type: 'other'
+                time: new Date(this.messageData.time)
             });
-            this.ws.send(JSON.stringify({
-                streamId: this.streamId,
-                ...this.messageData
-            }));
         }
     }
 
@@ -78,7 +74,7 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnChanges {
     onResize(event: DocumentEvent): void {
         this.handleResize();
     }
-    
+
     handleResize(): void {
         if (window.innerWidth <= 1200 && window.innerWidth > 992 || window.innerWidth > 1200) {
             const wrapperHeight = document.querySelector('.chat-box-wrapper').getBoundingClientRect().height;
@@ -88,36 +84,41 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnChanges {
             this.chatBoxHeight = wrapperHeight - titleHeight - messageInputHeight;
         }
     }
-    
+
     onChange(e: Event): void {
-        this.submitted = false;
         this.handleResize();
+        this.submitted = false;
         // @ts-ignore
         this.message = e.target.outerText.trim();
         this.submitting = this.message.length !== 0;
     }
-    
+
     onSubmit(): void {
         this.submitting = true;
         if (this.message?.length !== 0) {
             this.submitted = true;
             this.messageInputView.nativeElement.querySelector('.input').textContent = '';
-            
+
             const sendData = {
                 sender: {
                     name: this.userProfile.firstName + ' ' + this.userProfile.lastName,
+                    email: this.userProfile.email,
                     // @ts-ignore
-                    avatar: this.userProfile.attributes.picture[0] 
+                    avatar: this.userProfile.attributes.picture[0]
                 },
                 msg: this.message,
                 time: new Date()
             };
+
             this.webRTCAdaptor.sendData(this.streamId, JSON.stringify(sendData));
-            this.messages.push({
-                ...sendData,
-                type: 'me'
-            });
+            this.messages.push(sendData);
+
+            this.ws.send(JSON.stringify({
+                streamId: this.streamId,
+                ...sendData
+            }));
         }
         this.submitting = false;
+        this.handleResize();
     }
 }
