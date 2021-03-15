@@ -7,7 +7,7 @@ declare type MessagePayload = {
         avatar: string;
     },
     msg: string;
-    time: Date;
+    time: Date | string;
 };
 
 declare type CustomKeycloakProfile = KeycloakProfile & {

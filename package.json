@@ -26,6 +26,7 @@
     "keycloak-angular": "^8.1.0",
     "keycloak-js": "^12.0.4",
     "mdb-angular-ui-kit": "^1.0.0-alpha3",
+    "moment": "^2.29.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "webrtc-adapter": "^7.7.0",

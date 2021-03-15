@@ -10,10 +10,7 @@
     [ngStyle]="chatBoxHeight ? {'height': chatBoxHeight + 'px'} : null"
     *ngIf="messages.length > 0"
 >
-    <div
-        *ngFor="let m of messages" 
-        class="person-message"
-    >
+    <div *ngFor="let m of messages" class="person-message">
         <div class="avatar">
             <img [src]="m.sender.avatar" alt="Avatar">
         </div>
@@ -22,7 +19,7 @@
             <span class="content">{{m.msg}}</span>
         </div>
         <div class="message-time ms-1">
-            <span class="content">{{m.time.getHours()}}:{{m.time.getMinutes()}}</span>
+            <span class="content">{{toTimeDiff(m.time)}}</span>
         </div>
     </div>
 </div>

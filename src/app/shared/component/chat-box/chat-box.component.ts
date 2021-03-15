@@ -1,10 +1,11 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {KeycloakService} from 'keycloak-angular';
 import {KeycloakProfile} from 'keycloak-js';
-import {interval} from 'rxjs';
+import * as moment from 'moment';
 
 import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
 import {CustomKeycloakProfile, MessagePayload} from '../../../types';
+import {MessageHistoryService} from '../../../data/service/message-history.service';
 
 @Component({
     selector: 'app-chat-box',
@@ -37,22 +38,34 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnChanges {
 
     private userProfile: KeycloakProfile | CustomKeycloakProfile | null = null;
 
-    constructor(private keycloak: KeycloakService) {
+    constructor(
+        private keycloak: KeycloakService,
+        private messageHistory: MessageHistoryService
+    ) {
     }
 
     ngOnInit(): void {
-        this.ws = new WebSocket('ws://localhost:8080/messages');
+        const token = this.keycloak.getKeycloakInstance().token;
+        this.ws = new WebSocket('ws://localhost:8080/messages', [
+            'access_token', token
+        ]);
         this.ws.onopen = () => {
             console.log('ws connected');
         };
         this.ws.onerror = (e) => {
             console.log('Error occurred: ' + JSON.stringify(e));
         };
-        this.ws.onclose = () => {
+        this.ws.onclose = (e) => {
+            console.log(e);
             console.log('ws closed');
         };
         this.keycloak.loadUserProfile()
             .then(profile => this.userProfile = profile);
+        
+        this.messageHistory.getMessageHistory(this.streamId)
+            .subscribe(data => {
+                this.messages = data._embedded.messageList;
+            });
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -83,6 +96,14 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnChanges {
             const messageInputHeight = this.messageInputView.nativeElement.offsetHeight;
             this.chatBoxHeight = wrapperHeight - titleHeight - messageInputHeight;
         }
+    }
+    
+    toTimeDiff(time: string): string {
+        if (moment(new Date()).diff(time, 'days') > 0) {
+            return moment(time).fromNow();
+        }
+
+        return moment(time).format('HH:mm');
     }
 
     onChange(e: Event): void {

@@ -8,6 +8,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {HeaderComponent} from './layout/header/header.component';
 import {ContentLayoutComponent} from './layout/content-layout/content-layout.component';
 import {SharedModule} from './shared/shared.module';
+import {DataModule} from './data/data.module';
 
 const initializeKeycloak = (keycloak: KeycloakService) => {
     return () =>
@@ -36,6 +37,7 @@ const initializeKeycloak = (keycloak: KeycloakService) => {
         AppRoutingModule,
         SharedModule,
         CoreModule,
+        DataModule,
         KeycloakAngularModule
     ],
     providers: [
