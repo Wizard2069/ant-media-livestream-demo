@@ -9,6 +9,12 @@
     class="chat-box" 
     [ngStyle]="chatBoxHeight ? {'height': chatBoxHeight + 'px'} : null"
     *ngIf="messages.length > 0"
+    infiniteScroll
+    [infiniteScrollDistance]="2"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="onScrollDown()"
+    (scrolledUp)="onScrollUp()"
+    [scrollWindow]="false"
 >
     <div *ngFor="let m of messages" class="person-message">
         <div class="avatar">

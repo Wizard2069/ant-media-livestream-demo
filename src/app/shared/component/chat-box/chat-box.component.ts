@@ -37,6 +37,10 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnChanges {
     private ws: WebSocket;
 
     private userProfile: KeycloakProfile | CustomKeycloakProfile | null = null;
+    
+    private currentPage = 1;
+    private size = 5;
+    private totalPages;
 
     constructor(
         private keycloak: KeycloakService,
@@ -62,9 +66,10 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnChanges {
         this.keycloak.loadUserProfile()
             .then(profile => this.userProfile = profile);
         
-        this.messageHistory.getMessageHistory(this.streamId)
+        this.messageHistory.getMessageHistory(this.streamId, 1, this.size)
             .subscribe(data => {
                 this.messages = data._embedded.messageList;
+                this.totalPages = data.page.totalPages;
             });
     }
 
@@ -95,6 +100,25 @@ export class ChatBoxComponent implements OnInit, AfterViewInit, OnChanges {
             const titleHeight = this.titleView.nativeElement.offsetHeight;
             const messageInputHeight = this.messageInputView.nativeElement.offsetHeight;
             this.chatBoxHeight = wrapperHeight - titleHeight - messageInputHeight;
+        }
+    }
+    
+    onScrollDown(): void {
+        if (this.currentPage < this.totalPages) {
+            this.currentPage++;
+            this.messageHistory.getMessageHistory(this.streamId, this.currentPage, this.size)
+                .subscribe(data => {
+                    this.messages = [
+                        ...this.messages,
+                        ...data._embedded.messageList
+                    ];
+                });
+        }
+    }
+    
+    onScrollUp(): void {
+        if (this.currentPage > 1) {
+            this.currentPage--;
         }
     }
     

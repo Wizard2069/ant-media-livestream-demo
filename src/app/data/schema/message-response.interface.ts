@@ -2,10 +2,7 @@ import {MessagePayload} from '../../types';
 
 export interface MessageResponse {
     _embedded: {
-        messageList: (MessagePayload & {
-            id: string,
-            streamId: string
-        })[]
+        messageList: MessagePayload[]
     };
     page: {
         size: number,

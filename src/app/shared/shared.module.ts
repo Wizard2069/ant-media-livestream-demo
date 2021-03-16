@@ -12,6 +12,7 @@ import {PlayerComponent} from './component/player/player.component';
 import {MediaPlayerComponent} from './component/media-player/media-player.component';
 import {ChatBoxComponent} from './component/chat-box/chat-box.component';
 import {WebRtcService} from './service/web-rtc.service';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 
 @NgModule({
     declarations: [
@@ -27,7 +28,8 @@ import {WebRtcService} from './service/web-rtc.service';
         VgCoreModule,
         VgControlsModule,
         VgOverlayPlayModule,
-        VgBufferingModule
+        VgBufferingModule,
+        InfiniteScrollModule
     ],
     exports: [
         CommonModule,
