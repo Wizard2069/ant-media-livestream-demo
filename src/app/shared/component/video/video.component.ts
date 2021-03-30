@@ -1,4 +1,5 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {v4 as uuidv4} from 'uuid';
 
 import {WebRtcService} from '../../service/web-rtc.service';
 import {WebRTCAdaptor} from '../../../../assets/js/webrtc_adaptor.js';
@@ -15,7 +16,7 @@ export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public startStream = false;
     
-    public streamId = 'stream1';
+    public streamId;
     
     public data: MessagePayload;
 
@@ -47,14 +48,25 @@ export class VideoComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     
     onStartStream(): void {
-        this.webRTCAdaptor.publish(this.streamId, null);
-        this.startStream = true;
+        if (!this.streamId || this.streamId === '') {
+            alert('Stream name must be fill in');
+        } else {
+            this.streamId += '-' + uuidv4();
+            this.webRTCAdaptor.publish(this.streamId, null);
+            this.startStream = true;
+        }
+    }
+    
+    onChangeMode(): void {
+        this.webRTCAdaptor.switchDesktopCapture(this.streamId);
     }
     
     onStopStream(): void {
         this.webRTCAdaptor.stop(this.streamId);
         this.webRTCAdaptor.closePeerConnection(this.streamId);
+        this.streamId = null;
         this.startStream = false;
+        history.go(0);
     }
     
     onMute(mute): void {

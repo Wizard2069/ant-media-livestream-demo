@@ -3,7 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+    production: false,
+    antMediaBaseUrl: 'http://localhost:5080',
+    antMediaApp: 'liveStreamDemo',
+    antMediaWs: 'ws://localhost:5080',
+    keycloakBaseUrl: 'http://keycloak:8090',
+    keycloakRealm: 'demo',
+    messageServiceBaseUrl: 'http://localhost:8080',
+    messageServiceWs: 'ws://localhost:8080'
 };
 
 /*

@@ -35,6 +35,11 @@
             color: #050505;
             word-break: break-word;
         }
+        
+        .reply {
+            display: block;
+            font-size: 0.725rem;
+        }
     }
     
     .message-time {
@@ -44,6 +49,14 @@
         .content {
             color: gray;
         }
+    }
+    
+    .reply-to {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        cursor: pointer;
+        flex-grow: 1;
     }
 }
 

@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 
 import {WebRTCAdaptor} from '../../../assets/js/webrtc_adaptor.js';
 import {MessagePayload} from '../../types';
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class WebRtcService {
@@ -14,8 +15,8 @@ export class WebRtcService {
     };
 
     public mediaConstraints = {
-        video: true,
-        audio: true
+        video: false,
+        audio: false
     };
 
     public additionalConfig = {};
@@ -38,7 +39,7 @@ export class WebRtcService {
 
     initWebRTCAdaptor(): void {
         this.webRTCAdaptor = new WebRTCAdaptor({
-            websocket_url: 'ws://' + location.hostname + ':5080/liveStreamDemo/websocket',
+            websocket_url: `${environment.antMediaWs}/${environment.antMediaApp}/websocket`,
             mediaConstraints: this.mediaConstraints,
             peerconnection_config: this.pcConfig,
             sdp_constraints: this.sdpConstraints,

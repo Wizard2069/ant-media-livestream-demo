@@ -10,22 +10,26 @@
     [ngStyle]="chatBoxHeight ? {'height': chatBoxHeight + 'px'} : null"
     *ngIf="messages.length > 0"
     infiniteScroll
-    [infiniteScrollDistance]="2"
+    [infiniteScrollDistance]="0"
     [infiniteScrollThrottle]="50"
     (scrolled)="onScrollDown()"
     (scrolledUp)="onScrollUp()"
     [scrollWindow]="false"
 >
-    <div *ngFor="let m of messages" class="person-message">
+    <div *ngFor="let m of messages; let i = index" class="person-message">
         <div class="avatar">
             <img [src]="m.sender.avatar" alt="Avatar">
         </div>
         <div class="message">
+            <span class="reply" *ngIf="m.replyTo">Replied to {{m.replyTo.name}}</span>
             <span class="username">{{m.sender.name}}</span>
             <span class="content">{{m.msg}}</span>
         </div>
         <div class="message-time ms-1">
             <span class="content">{{toTimeDiff(m.time)}}</span>
+        </div>
+        <div class="reply-to" *ngIf="host" (mouseover)="showIcons[i] = true" (mouseleave)="showIcons[i] = false">
+            <i class="fas fa-reply" *ngIf="showIcons[i]" (click)="onReply(m)"></i>
         </div>
     </div>
 </div>

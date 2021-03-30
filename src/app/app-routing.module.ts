@@ -12,8 +12,7 @@ const routes: Routes = [
             {
                 path: '',
                 loadChildren: () =>
-                    import('./modules/home/home.module').then(m => m.HomeModule),
-                pathMatch: 'full'
+                    import('./modules/home/home.module').then(m => m.HomeModule)
             },
             {
                 path: 'stream',

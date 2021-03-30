@@ -5,6 +5,7 @@ import {throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 
 import {MessageResponse} from '../schema/message-response.interface';
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class MessageHistoryService {
@@ -14,12 +15,12 @@ export class MessageHistoryService {
     
     getMessageHistory(streamId: string, page = 1, limit = 10): Observable<MessageResponse> {
         return this.http.get<MessageResponse>(
-            `http://localhost:8080/api/v1/streams/${streamId}/message-history`,
+            `${environment.messageServiceBaseUrl}/api/v1/streams/${streamId}/message-history`,
             {
                 params: new HttpParams({
                     fromObject: {
-                        page: page.toString(),
-                        limit: limit.toString()
+                        limit: limit.toString(),
+                        page: page.toString()
                     }
                 })
             }

@@ -9,20 +9,23 @@ import {HeaderComponent} from './layout/header/header.component';
 import {ContentLayoutComponent} from './layout/content-layout/content-layout.component';
 import {SharedModule} from './shared/shared.module';
 import {DataModule} from './data/data.module';
+import {environment} from '../environments/environment';
 
 const initializeKeycloak = (keycloak: KeycloakService) => {
     return () =>
         keycloak.init({
             config: {
-                url: 'http://localhost:8090/auth',
-                realm: 'demo',
+                url: `${environment.keycloakBaseUrl}/auth`,
+                realm: `${environment.keycloakRealm}`,
                 clientId: 'livestream-demo',
             },
             initOptions: {
                 onLoad: 'check-sso',
                 silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
             },
-            bearerExcludedUrls: ['/assets']
+            bearerExcludedUrls: [
+                '/assets', 'https://api.ipify.org', `${environment.antMediaBaseUrl}`
+            ]
         });
 };
 

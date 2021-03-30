@@ -25,7 +25,7 @@ export class AuthGuard extends KeycloakAuthGuard implements CanActivateChild, Ca
         authenticated.then(async (isAuth) => {
             if (!isAuth) {
                 await this.keycloak.login({
-                    redirectUri: window.location.origin + '/' + segments[0].path
+                    redirectUri: window.location.origin + '/' + segments.map(s => s.path).join('/')
                 });
             } 
         });
